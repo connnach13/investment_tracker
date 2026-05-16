@@ -1,0 +1,116 @@
+=================================================
+  investment_tracker / 構造ドキュメント
+  作成日: 2026-05-09
+=================================================
+
+
+-------------------------------------------------
+  1. GitHub 構造
+-------------------------------------------------
+
+Repository
+└── investment_tracker
+    │
+    ├── Projects
+    │   └── investment_tracker          # かんばんボード
+    │       ├── Todo
+    │       ├── In_progress
+    │       └── Done
+    │
+    ├── Milestones
+    │   ├── M0_setup                    # 環境構築
+    │   ├── M1_data_foundation          # データ基盤
+    │   ├── M2_transaction              # 取引記録機能
+    │   ├── M3_portfolio                # 保有銘柄一覧
+    │   └── M4_pnl                      # 損益計算
+    │
+    └── Issues
+        ├── M0_python_setup             # Python仮想環境の構築
+        ├── M0_readme_gitignore         # README・.gitignoreの追加
+        ├── M1_stock_table              # 銘柄テーブルの設計・作成
+        ├── M1_transaction_table        # 取引テーブルの設計・作成
+        ├── M2_transaction_form         # 取引入力フォームの実装
+        ├── M2_transaction_list         # 取引一覧テーブルの実装
+        ├── M3_average_cost             # 平均取得単価の計算ロジック
+        └── M4_pnl_calculation          # 確定損益・含み益の計算（FIFO）
+
+
+-------------------------------------------------
+  2. ローカル フォルダ構成
+-------------------------------------------------
+
+Desktop
+│
+User_File
+|
+Develop_File
+|
+investment_tracker/
+├── README.md
+├── main.py
+├── requirements.txt
+├── .gitignore
+│
+├── ui/                                 # 画面（PyQt6）
+│   ├── main_window.py
+│   ├── transaction_form.py
+│   └── portfolio_view.py
+│
+├── logic/                              # ビジネスロジック・計算
+│   ├── pnl_calculator.py              # 損益計算（FIFO）
+│   └── portfolio.py                   # 保有集計
+│
+├── models/                             # DBモデル（SQLAlchemy）
+│   ├── base.py
+│   ├── stock.py                       # 銘柄
+│   └── transaction.py                 # 取引
+│
+├── services/                           # 外部連携（v2以降）
+│   └── price_fetcher.py               # 株価取得
+│
+└── tests/                              # テスト（pytest）
+    ├── test_pnl.py
+    └── test_portfolio.py
+
+
+-------------------------------------------------
+  3. 技術スタック
+-------------------------------------------------
+
+言語          Python 3.11.9
+GUI           PyQt6
+ORM           SQLAlchemy
+DB            SQLite（ローカル）
+テスト        pytest
+バージョン管理 Git / GitHub
+
+
+-------------------------------------------------
+  4. バージョン計画
+-------------------------------------------------
+
+v1            記録・集計（現在）
+v2            株価取得・チャート表示
+v3            シミュレーション（テクニカル指標）
+v4            自動取引（本番）
+
+=================================================
+
+-------------------------------------------------
+  5. ER図
+-------------------------------------------------
+
+stock               transaction
+-----------         -------------------
+id (PK)      1 ──< id (PK)
+code                stock_id (FK)
+name                transaction_type
+market              quantity
+                    price
+                    amount
+                    account_type
+                    commission
+                    date
+
+リレーション：stock 1対多 transaction
+（1つの銘柄に対して複数の取引が紐づく）
